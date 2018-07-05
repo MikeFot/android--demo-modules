@@ -1,0 +1,78 @@
+apply plugin: 'com.android.application'
+
+android {
+
+    compileSdkVersion rootProject.ext.androidVersions.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.androidVersions.minSdkVersion
+        targetSdkVersion rootProject.ext.androidVersions.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        applicationId "com.michaelfotiadis.demomodules.app"
+
+        vectorDrawables.useSupportLibrary = true
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources false
+
+            FileCollection proGuardFileCollection = files { file('./proguard').listFiles() }
+            for (File file : proGuardFileCollection) {
+                proguardFile(file)
+            }
+            proguardFile getDefaultProguardFile('proguard-android.txt')
+
+            logger.info("Used a total of " + getProguardFiles().size() + " Proguard files")
+            for (final File file : getProguardFiles()) {
+                logger.info('Used Proguard File: ' + file.toURI())
+            }
+        }
+        debug {
+            minifyEnabled false
+            debuggable true
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/LGPL2.1'
+        exclude 'META-INF/MANIFEST.MF'
+        exclude 'META-INF/rxjava.properties'
+        exclude 'META-INF/ASL2.0'
+    }
+}
+
+dependencies {
+
+    implementation project(':data')
+
+    implementation rootProject.ext.dependencies.appCompatV7
+    implementation rootProject.ext.dependencies.design
+    implementation rootProject.ext.dependencies.cardViewV7
+    implementation rootProject.ext.dependencies.supportV13
+    implementation rootProject.ext.dependencies.constraintLayout
+    implementation rootProject.ext.dependencies.gson
+
+    implementation rootProject.ext.dependencies.rxJava2
+    implementation rootProject.ext.dependencies.rxAndroid
+    implementation rootProject.ext.dependencies.butterKnife
+    annotationProcessor rootProject.ext.dependencies.butterKnifeApt
+
+    testImplementation rootProject.ext.testDependencies.jUnit
+
+}

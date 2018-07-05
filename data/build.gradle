@@ -1,0 +1,51 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.androidVersions.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.androidVersions.minSdkVersion
+        targetSdkVersion rootProject.ext.androidVersions.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+
+            FileCollection proGuardFileCollection = files { file('./proguard').listFiles() }
+            for (File file : proGuardFileCollection) {
+                proguardFile(file)
+            }
+            proguardFile getDefaultProguardFile('proguard-android.txt')
+
+            logger.info("Used a total of " + getProguardFiles().size() + " Proguard files")
+            for (final File file : getProguardFiles()) {
+                logger.info('Used Proguard File: ' + file.toURI())
+            }
+        }
+        debug {
+            minifyEnabled false
+            debuggable true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+
+dependencies {
+
+    implementation project(':net')
+
+    implementation rootProject.ext.dependencies.rxJava2
+
+    testImplementation rootProject.ext.testDependencies.jUnit
+
+}
