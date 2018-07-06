@@ -7,8 +7,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.michaelfotiads.demomodules.data.CallBack;
 import com.michaelfotiads.demomodules.data.Post;
 import com.michaelfotiads.demomodules.data.PostsRepository;
+import com.michaelfotiads.demomodules.data.callback.Reason;
+import com.michaelfotiads.demomodules.data.log.NetLogger;
 
 import java.util.List;
 
@@ -17,7 +20,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
@@ -41,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        // do this in APPLICATION
+        NetLogger.setLogger(new NetLoggerImpl());
+
         repository = new PostsRepository(PATH, BuildConfig.DEBUG);
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
         listView.setAdapter(adapter);
@@ -51,23 +56,17 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.button_sync)
     protected void onSyncClicked(View view) {
         setLoading();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                final PostsRepository.Result result = repository.getPosts();
+        new Thread(() -> {
+            final PostsRepository.Result result = repository.getPosts();
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (result.hasError()) {
-                            setError(result.errorMessage);
-                        } else if (result.hasPosts()) {
-                            setItems(result.posts);
-                        }
-                    }
-                });
+            runOnUiThread(() -> {
+                if (result.hasError()) {
+                    setError(result.errorMessage);
+                } else if (result.hasPosts()) {
+                    setItems(result.posts);
+                }
+            });
 
-            }
         }).start();
 
 
@@ -77,18 +76,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onAsyncClicked(View view) {
 
         setLoading();
-        repository.enqueuePosts(new PostsRepository.CallBack() {
+        repository.enqueuePosts(new CallBack<List<Post>>() {
             @Override
-            public void onSuccess(List<Post> posts) {
-                setItems(posts);
+            public void onSuccess(List<Post> item) {
+                setItems(item);
             }
 
             @Override
-            public void onError(String message) {
-                setError(message);
+            public void onError(Reason reason) {
+                setError(reason.getDescription());
             }
         });
-
     }
 
     @OnClick(R.id.button_rx)
@@ -97,14 +95,11 @@ public class MainActivity extends AppCompatActivity {
         subscriptions.add(repository.observePosts()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<PostsRepository.Result>() {
-                    @Override
-                    public void accept(PostsRepository.Result result) {
-                        if (result.hasError()) {
-                            setError(result.errorMessage);
-                        } else if (result.hasPosts()) {
-                            setItems(result.posts);
-                        }
+                .subscribe(result -> {
+                    if (result.hasError()) {
+                        setError(result.errorMessage);
+                    } else if (result.hasPosts()) {
+                        setItems(result.posts);
                     }
                 })
         );

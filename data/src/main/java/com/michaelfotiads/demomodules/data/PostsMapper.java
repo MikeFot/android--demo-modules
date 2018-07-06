@@ -3,9 +3,10 @@ package com.michaelfotiads.demomodules.data;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostsMapper {
+public class PostsMapper extends Mapper<Post, com.michaelfotiads.demomodules.net.Post> {
 
-    public static List<Post> map(final List<com.michaelfotiads.demomodules.net.Post> netPosts) {
+    @Override
+    public List<Post> map(final List<com.michaelfotiads.demomodules.net.Post> netPosts) {
 
         final List<Post> posts = new ArrayList<>();
 
@@ -17,8 +18,10 @@ public class PostsMapper {
 
     }
 
-    public static Post map(final com.michaelfotiads.demomodules.net.Post netPost) {
+    @Override
+    public Post map(final com.michaelfotiads.demomodules.net.Post netPost) {
         return new Post(netPost.userId, netPost.id, netPost.title, netPost.body);
     }
+
 
 }
