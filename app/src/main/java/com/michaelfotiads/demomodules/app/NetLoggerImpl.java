@@ -31,7 +31,7 @@ public class NetLoggerImpl implements NetLogger.Logger {
 
     @Override
     public boolean isEnabled() {
-        return BuildConfig.DEV_MODE;
+        return BuildConfig.DEBUG;
     }
 
 

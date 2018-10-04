@@ -14,7 +14,7 @@ android {
 
         vectorDrawables.useSupportLibrary = true
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
     buildTypes {
@@ -70,8 +70,6 @@ dependencies {
 
     implementation rootProject.ext.dependencies.rxJava2
     implementation rootProject.ext.dependencies.rxAndroid
-    implementation rootProject.ext.dependencies.butterKnife
-    annotationProcessor rootProject.ext.dependencies.butterKnifeApt
 
     testImplementation rootProject.ext.testDependencies.jUnit
 

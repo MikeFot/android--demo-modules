@@ -13,12 +13,14 @@
         android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:onClick="onSyncClicked"
         android:text="Sync Posts"/>
 
     <Button
         android:id="@+id/button_async"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="180dp"
+        android:onClick="onAsyncClicked"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="ASync Posts"/>
@@ -29,6 +31,7 @@
         android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:onClick="onRxClicked"
         android:text="RX Posts"/>
 
     <TextView

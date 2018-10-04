@@ -2,7 +2,7 @@ allprojects {
     ext {
         // NEVER name this block 'android'. Never name *ANY* block android
         androidVersions = [
-                supportLibVersion: "28.0.0-alpha1",
+                androidXVersion  : "1.0.0",
                 minSdkVersion    : 21,
                 targetSdkVersion : 28,
                 compileSdkVersion: 28,
@@ -23,16 +23,13 @@ allprojects {
 
         dependencies = [
                 // *** android block
-                appCompatV7           : "com.android.support:appcompat-v7:$androidVersions.supportLibVersion",
-                design                : "com.android.support:design:$androidVersions.supportLibVersion",
-                cardViewV7            : "com.android.support:cardview-v7:$androidVersions.supportLibVersion",
-                supportV4             : "com.android.support:support-v4:$androidVersions.supportLibVersion",
-                supportV13            : "com.android.support:support-v13:$androidVersions.supportLibVersion",
-                customTabs            : "com.android.support:customtabs:$androidVersions.supportLibVersion",
-                mediaCompatV4         : "com.android.support:support-media-compat:$androidVersions.supportLibVersion",
-                exifinterface         : "com.android.support:exifinterface:$androidVersions.supportLibVersion",
-                preferenceV14         : "com.android.support:preference-v14:$androidVersions.supportLibVersion",
-                constraintLayout      : 'com.android.support.constraint:constraint-layout:1.1.0',
+                appCompatV7           : "androidx.appcompat:appcompat:$androidVersions.androidXVersion",
+                design                : "com.google.android.material:material:1.0.0-rc01",
+                cardViewV7            : "androidx.cardview:cardview:$androidVersions.androidXVersion",
+                supportV4             : "androidx.legacy:legacy-support-v4:$androidVersions.androidXVersion",
+                supportV13            : "androidx.legacy:legacy-support-v13:$androidVersions.androidXVersion",
+                customTabs            : "androidx.browser:browser:$androidVersions.androidXVersion",
+                constraintLayout      : 'androidx.constraintlayout:constraintlayout:1.1.2',
                 // *** retrofit block
                 retrofit2             : "com.squareup.retrofit2:retrofit:$retrofit.retrofitVersion",
                 retrofit2GsonConverter: "com.squareup.retrofit2:converter-gson:$retrofit.retrofitVersion",

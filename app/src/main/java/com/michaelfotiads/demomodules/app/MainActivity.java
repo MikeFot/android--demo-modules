@@ -1,7 +1,6 @@
 package com.michaelfotiads.demomodules.app;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -15,9 +14,7 @@ import com.michaelfotiads.demomodules.data.log.NetLogger;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import androidx.appcompat.app.AppCompatActivity;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -31,9 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private PostsRepository repository;
     private ArrayAdapter<String> adapter;
 
-    @BindView(R.id.content_view)
     protected TextView contentView;
-    @BindView(R.id.list_view)
     protected ListView listView;
 
 
@@ -41,7 +36,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+
+        contentView = findViewById(R.id.content_view);
+        listView = findViewById(R.id.list_view);
 
         // do this in APPLICATION
         NetLogger.setLogger(new NetLoggerImpl());
@@ -53,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @OnClick(R.id.button_sync)
     protected void onSyncClicked(View view) {
         setLoading();
         new Thread(() -> {
@@ -72,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @OnClick(R.id.button_async)
     protected void onAsyncClicked(View view) {
 
         setLoading();
@@ -89,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @OnClick(R.id.button_rx)
     protected void onRxClicked(View view) {
         setLoading();
         subscriptions.add(repository.observePosts()
